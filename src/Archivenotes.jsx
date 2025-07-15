@@ -47,7 +47,7 @@ const Archivenotes = ({ notes, setNotes }) => {
                                 return (
                                     <div key={i.id} className=" bg-gray-700 p-4 m-4 rounded-lg shadow shadow-gray-500 hover:scale-103  transtion duration-300">
 
-                                        <h3 className="text-lg font-semibold">Title : {i.title}</h3>
+                                        <h2 className="text-lg font-semibold">Title : {i.title}</h2>
                                         <p className="text-gray-300 mb-4">Description : {i.description}</p>
 
 

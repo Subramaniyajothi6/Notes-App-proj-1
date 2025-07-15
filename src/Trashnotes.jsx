@@ -63,7 +63,7 @@ const Trashnotes = ({ notes, setNotes }) => {
                       trashednotes.map((i) => {
               return (
                 <div key={i.id} className="bg-gray-700 p-4 m-4 rounded-lg hover:scale-103 transition duration-300">
-                  <h3 className="text-lg font-semibold">Title: {i.title}</h3>
+                  <h2 className="text-lg font-semibold">Title: {i.title}</h2>
                   <p className="text-gray-300 mb-4">Description: {i.description}</p>
                   <div className="flex gap-2">
                     {/* restore button */}

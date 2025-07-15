@@ -1,7 +1,11 @@
 import { useEffect, useReducer, useState } from "react";
-import { MdOutlinePushPin } from "react-icons/md";
 import { Link, Outlet } from "react-router";
+import React, { lazy, Suspense } from "react";
 
+
+const MdOutlinePushPin = lazy(() =>
+  import("react-icons/md").then((module) => ({ default: module.MdOutlinePushPin }))
+);
 
 const Homepage = ({ notes, setNotes }) => {
 
@@ -47,46 +51,47 @@ const Homepage = ({ notes, setNotes }) => {
     }
   }
 
-  const [pinordercount, setpinordercount] = useState(1) 
+  const [pinordercount, setpinordercount] = useState(1)
 
   const handlepin = (id) => {
 
     const updatednotes = notes.map((note) => {
-     if(note.id === id){
-      if(!note.pinned){
-          return{
-        ...note,
-        pinned:true,
-        pinorder:pinordercount
-      }
-    }
-      else{
-        return{
-          ...note,
-          pinned:false,
-          pinorer:null
+      if (note.id === id) {
+        if (!note.pinned) {
+          return {
+            ...note,
+            pinned: true,
+            pinorder: pinordercount
+          }
+        }
+        else {
+          return {
+            ...note,
+            pinned: false,
+            pinorer: null
+          }
+
         }
 
       }
-
-     } 
-      return note})
+      return note
+    })
       .sort((a, b) => {
-          if(a.pinned && !b.pinned) return -1
-          if(!a.pinned && b.pinned) return 1
-          if(a.pinned && b.pinned) return a.pinorder - b.pinorder
+        if (a.pinned && !b.pinned) return -1
+        if (!a.pinned && b.pinned) return 1
+        if (a.pinned && b.pinned) return a.pinorder - b.pinorder
 
-          return 0
+        return 0
       })
 
-    
-  if (notes.find(note => note.id === id && !note.pinned)) {
-    setpinordercount(prev => prev + 1);
-  }
 
-  setNotes(updatednotes);
-  return updatednotes;
-};
+    if (notes.find(note => note.id === id && !note.pinned)) {
+      setpinordercount(prev => prev + 1);
+    }
+
+    setNotes(updatednotes);
+    return updatednotes;
+  };
 
   const handleArchived = (id) => {
     const archivednotes = notes.map((note) => {
@@ -154,7 +159,7 @@ const Homepage = ({ notes, setNotes }) => {
           <div className="flex border p-2 mt-4 justify-between flex-col md:flex-row items-center">
 
             <div className=" border-white flex  flex-col w-3/4 md:flex-row gap-3 md:gap-0 ">
-              <input type="text" className=" mx-2 py-1 px-2 text-white border  w-8/9" placeholder="Search Note" value={searchquery} onChange={(e) => { return setSearchquery(e.target.value) }} /> 
+              <input type="text" className=" mx-2 py-1 px-2 text-white border  w-8/9" placeholder="Search Note" value={searchquery} onChange={(e) => { return setSearchquery(e.target.value) }} />
               <input type="text" className=" mx-2 py-1 px-2 text-white border w-8/9 " placeholder="Search by tag" value={tagfilter} onChange={(e) => { return setTagfilter(e.target.value) }} />
             </div>
 
@@ -165,10 +170,10 @@ const Homepage = ({ notes, setNotes }) => {
               </button>
 
               <Link to="/archived">
-                <button className="bg-amber-500 py-1 px-2 rounded-md ">Archived</button>
+                <button className="bg-amber-600 hover:bg-amber-700 py-1 px-2 rounded-md ">Archived</button>
               </Link>
               <Link to={"/trash"}>
-                <button className="bg-red-500 py-1 px-2 rounded-md ">Trash</button>
+                <button className="bg-red-600 hover:bg-red-700 py-1 px-2 rounded-md ">Trash</button>
               </Link>
 
             </div>
@@ -208,21 +213,21 @@ const Homepage = ({ notes, setNotes }) => {
                 }
                 dispatch({ type: 'reset' })
               }} className="flex flex-col justify-center relative text-black" >
-                <button className="bg-red-500 text-white py-1 px-2 absolute top-0 right-0 rounded-md" onClick={handleoverlay} type="button">close</button>
+                <button className="bg-red-600 hover:bg-red-700 text-white py-1 px-2 absolute top-0 right-0 rounded-md" onClick={handleoverlay} type="button">close</button>
                 <h2 className="text-3xl">New Note</h2>
                 <input type="text" className="text-black my-3 text-lg bg-gray-200 rounded-md px-2 py-0.5" placeholder="Title" value={state.title} onChange={(e) => { dispatch({ type: 'title', payload: e.target.value }) }} />
                 <textarea className="bg-gray-200 text-md rounded-md px-2 py-0.5" name="Description" placeholder="Write Your Note Here" value={state.description}
                   onChange={(e) => { dispatch({ type: 'description', payload: e.target.value }) }}></textarea>
                 <input type="text" className="text-black my-3 text-md bg-gray-200 rounded-md px-2 py-0.5" placeholder="Tags" value={state.tags} onChange={(e) => { dispatch({ type: 'tags', payload: e.target.value }) }} />
 
-                <button className=" py-0.5 px-3 rounded-md mt-1 mx-auto text-md bg-blue-500 text-white" type="submit">save</button>
+                <button className=" py-0.5 px-3 rounded-md mt-1 mx-auto text-md bg-blue-600 text-white" type="submit">save</button>
               </form>
             </div>
           </div>
 
 
 
-      
+
 
           <div className="text-white grid bg-gray-800 gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
         xl:grid-cols-5 py-10 mx-3 sm:mx-0 ">
@@ -240,40 +245,39 @@ const Homepage = ({ notes, setNotes }) => {
                 .map((i) => {
                   return (
                     <div key={i.id} className=" bg-gray-700 font-medium rounded-md  gap-2 p-2 relative hover:scale-102 transition duration-300">
-                      <h3>Title : {i.title}</h3>
+                      <h2>Title : {i.title}</h2>
                       <p>Description : {i.description}</p>
                       <p>Tag : {i.tags}</p>
 
 
-
-                      <button className="bg-amber-500 opacity-80 hover:opacity-100 hover:bg-amber-600  p-1 text-1xl  rounded-xl text-black/70 absolute top-1 right-1 " onClick={() => { handlepin(i.id) }}><MdOutlinePushPin /></button>
-
+                            <Suspense fallback={<span>📌</span> }
+                            > <MdOutlinePushPin className="absolute top-1 right-1 text-2xl text-amber-600 opacity-80 hover:opacity-100 " onClick={() => { handlepin(i.id) }}></MdOutlinePushPin></Suspense>
 
                       <div className="flex  justify-between mt-2 ">
-                        <button type="button" className="bg-purple-500 hover:bg-purple-600 py-1 px-2.5 rounded-2xl" onClick={() => { handleEdit(i.id) }} >Edit</button>
-                        <button type="button" className="bg-amber-500 py-1 px-2.5 rounded-2xl hover:bg-amber-600  " onClick={() => {
+                        <button type="button" className="bg-purple-600 hover:bg-purple-700 py-1 px-2.5 rounded-2xl" onClick={() => { handleEdit(i.id) }} >Edit</button>
+                        <button type="button" className="bg-amber-600 py-1 px-2.5 rounded-2xl hover:bg-amber-700  " onClick={() => {
                           handleArchived(i.id)
                           localStorage.setItem("archived", JSON.stringify(notes.filter(i => { return i.archived })))
                         }}>Archive </button>
-                        <button type="button" className="bg-red-500 opacity-80 hover:opacity-100 hover:bg-red-600 py-1 px-2.5 rounded-2xl " onClick={() => { handletrash(i.id) }}>delelte </button>
+                        <button type="button" className="bg-red-600 opacity-80 hover:opacity-100 hover:bg-red-700 py-1 px-2.5 rounded-2xl " onClick={() => { handletrash(i.id) }}>delete </button>
                       </div>
                     </div>
-                  )
+          )
                 })
 
             }
 
-          </div>
-
-
-
- 
-
-
-
-
         </div>
+
+
+
+
+
+
+
+
       </div>
+    </div >
 
     </>
   )
